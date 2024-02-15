@@ -27,7 +27,10 @@ jobs:
         packages: >-
           git gcc-g++ patch python39 make zlib-devel curl cmake
     - name: Mark directory safe for git
-      run: git config --global --add safe.directory .
+      run: |
+        git config --global --add safe.directory .;
+        git config --global --add safe.directory /cygdrive/d/a/mrustc/mrustc;
+        git config --global --add safe.directory $(pwd);
     - name: make
       run: |
         make all
