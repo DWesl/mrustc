@@ -26,6 +26,8 @@ jobs:
       with:
         packages: >-
           git gcc-g++ patch python39 make zlib-devel curl cmake
+    - name: Mark directory safe for git
+      run: git config --global --add safe.directory .
     - name: make
       run: |
         make all
