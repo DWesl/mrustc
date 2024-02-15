@@ -33,11 +33,12 @@ jobs:
         git config --global --add safe.directory $(pwd);
     - name: Test git output
       run: |
-        git diff-index --quiet HEAD; echo $?;
         date -uR
         git show -s --pretty=%h --no-show-signature
         git symbolic-ref -q --short HEAD || git describe --tags --exact-match
         git show --pretty=%H -s --no-show-signature
+        git status
+        git diff-index --quiet HEAD; echo $?;
     - name: make
       run: |
         make all VERBOSE=1
