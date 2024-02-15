@@ -12,7 +12,7 @@ env:
 
 defaults:
   run:
-    shell: 'C:\cygwin\bin\bash -eo pipefail -o igncr {0}'
+    shell: "C:/cygwin/bin/bash.exe -eo pipefail -o igncr {0}"
 
 jobs:
   build:
