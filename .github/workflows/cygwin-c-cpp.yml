@@ -1,0 +1,40 @@
+name: Cygwin C/C++ CI
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+env:
+  CYGWIN_NOWINPATH: 1
+  CHERE_INVOKING: 1
+  SHELLOPTS: igncr
+
+defaults:
+  run:
+    shell: 'C:\cygwin\bin\bash -eo pipefail -o igncr {0}'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - run: git config --global core.autocrlf input
+    - uses: actions/checkout@v4
+    - uses: cygwin/install-cygwin-action@v4
+      with:
+        packages: >-
+          git gcc-g++ patch python39 make zlib-devel curl cmake
+    - name: make
+      run: |
+        make all
+        make -C tools/minicargo
+        make -C tools/testrunner
+    - name: save artefacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: cygwin-binaries
+        path: |
+          bin/minicargo
+          bin/mrustc
+          bin/testrunner
