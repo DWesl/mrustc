@@ -31,9 +31,16 @@ jobs:
         git config --global --add safe.directory .;
         git config --global --add safe.directory /cygdrive/d/a/mrustc/mrustc;
         git config --global --add safe.directory $(pwd);
+    - name: Test git output
+      run: |
+        git diff-index --quiet HEAD; echo $?;
+        date -uR
+        git show -s --pretty=%h --no-show-signature
+        git symbolic-ref -q --short HEAD || git describe --tags --exact-match
+        git show --pretty=%H -s --no-show-signature
     - name: make
       run: |
-        make all
+        make all VERBOSE=1
         make -C tools/minicargo
         make -C tools/testrunner
     - name: save artefacts
