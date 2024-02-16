@@ -23,6 +23,7 @@
 # include <vector>
 # ifdef __CYGWIN__
 #  include <sys/select.h>
+#  include <stdlib.h>
 # endif
 #endif
 
