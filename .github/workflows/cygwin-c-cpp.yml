@@ -41,7 +41,7 @@ jobs:
         git diff-index --quiet HEAD; echo $?;
     - name: make
       run: |
-        make all VERBOSE=1
+        make all VERBOSE=1 CXXFLAGS_EXTRA="-D_POSIX_C_SOURCE=200809 -D_XOPEN_SOURCE=700"
         make -C tools/minicargo
         make -C tools/testrunner
     - name: save artefacts
