@@ -21,6 +21,9 @@
 # include <fcntl.h>
 # include <thread>
 # include <vector>
+# ifdef __CYGWIN__
+#  include <sys/select.h>
+# endif
 #endif
 
 #ifdef _WIN32
