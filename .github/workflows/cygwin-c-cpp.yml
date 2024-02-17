@@ -9,6 +9,7 @@ env:
   CYGWIN_NOWINPATH: 1
   CHERE_INVOKING: 1
   SHELLOPTS: igncr
+  CXXFLAGS_EXTRA: "-D_POSIX_C_SOURCE=200809 -D_XOPEN_SOURCE=700"
 
 defaults:
   run:
@@ -41,13 +42,51 @@ jobs:
         git diff-index --quiet HEAD; echo $?;
     - name: make
       run: |
-        make all VERBOSE=1 CXXFLAGS_EXTRA="-D_POSIX_C_SOURCE=200809 -D_XOPEN_SOURCE=700"
+        make all
         make -C tools/minicargo
         make -C tools/testrunner
     - name: save artefacts
       uses: actions/upload-artifact@v2
       with:
         name: cygwin-binaries
+
+  test:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+          rustver: ["1.29", "1.39", "1.19", "1.54"]
+    runs-on: windows-latest
+    env:
+     RUSTC_VERSION: ${{ matrix.rustver }}.0
+     MRUSTC_TARGET_VER: ${{ matrix.rustver }}
+     OUTDIR_SUF: -${{ matrix.rustver }}.0
+    steps:
+    - run: git config --global core.autocrlf input
+      shell: cmd
+    - uses: actions/checkout@v4
+    - uses: cygwin/cygwin-install-action@v4
+      with:
+        packages: >-
+          git gcc-g++ patch python39 make zlib-devel curl cmake
+    - name: Mark directory safe for git
+      run: |
+        git config --global --add safe.directory .;
+        git config --global --add safe.directory /cygdrive/d/a/mrustc/mrustc;
+        git config --global --add safe.directory $(pwd);
+    - name: avoid recompile
+      run: make --touch && make --touch -C tools/minicargo && make --touch -C tools/testrunner
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: binaries
+        path: bin
+    - name: make RUSTCSRC
+      run: make RUSTCSRC
+    - name: avoid recompile 2
+      run: make --touch && make --touch -C tools/minicargo && make --touch -C tools/testrunner && chmod +x bin/*
+    - name: make test
+      run: make test
         path: |
           bin/minicargo
           bin/mrustc
