@@ -83,7 +83,7 @@ jobs:
     - name: Download all workflow run artifacts
       uses: actions/download-artifact@v2
       with:
-        name: binaries
+        name: cygwin-binaries
         path: bin
     - name: make RUSTCSRC
       run: make RUSTCSRC
