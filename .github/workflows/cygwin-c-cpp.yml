@@ -49,6 +49,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: cygwin-binaries
+        path: |
+          bin/minicargo
+          bin/mrustc
+          bin/testrunner
 
   test:
     needs: build
@@ -87,7 +91,3 @@ jobs:
       run: make --touch && make --touch -C tools/minicargo && make --touch -C tools/testrunner && chmod +x bin/*
     - name: make test
       run: make test
-        path: |
-          bin/minicargo
-          bin/mrustc
-          bin/testrunner
