@@ -85,6 +85,8 @@ jobs:
       with:
         name: cygwin-binaries
         path: bin
+    - name: Link bin to tools/bin
+      run: ln -s bin tools/bin && ls -lahd tools/bin/*
     - name: make RUSTCSRC
       run: make RUSTCSRC
     - name: avoid recompile 2
