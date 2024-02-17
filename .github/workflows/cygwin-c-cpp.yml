@@ -50,9 +50,9 @@ jobs:
       with:
         name: cygwin-binaries
         path: |
-          bin/minicargo
-          bin/mrustc
-          bin/testrunner
+          bin/minicargo.exe
+          bin/mrustc.exe
+          bin/testrunner.exe
 
   test:
     needs: build
